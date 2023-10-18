@@ -517,7 +517,7 @@ def data_preprocess():
 
         dataset_id = dataset.split('_')[0].replace('Dataset', '')
         
-        complete_command = f"conda activate {conda_env} && nnUNetv2_plan_and_preprocess -d {dataset_id} --verify_dataset_integrity"
+        complete_command = f"nnUNetv2_plan_and_preprocess -d {dataset_id} --verify_dataset_integrity"
         print(complete_command)
 
         threading.Thread(target=run_command_async, args=(complete_command,)).start()
@@ -550,17 +550,17 @@ def train_model():
 
         if os.environ['MODEL_NAME'] == 'nnunet' or os.environ['MODEL_NAME'] == 'nnsam':
             dataset_id = dataset_id.split('_')[0].replace('Dataset', '')
-            complete_command = f"conda activate {conda_env} && nnUNetv2_train {dataset_id} 2d {fold}"
+            complete_command = f"nnUNetv2_train {dataset_id} 2d {fold}"
         elif os.environ['MODEL_NAME'] == 'nnunet3d':
             dataset_id = dataset_id.split('_')[0].replace('Dataset', '')
-            complete_command = f"conda activate {conda_env} && nnUNetv2_train {dataset_id} 3d_fullres {fold}"
+            complete_command = f"nnUNetv2_train {dataset_id} 3d_fullres {fold}"
 
         else:
             split_json_path = os.path.join(os.environ['nnUNet_preprocessed'], dataset_id, 'splits_final.json')
             if not os.path.exists(split_json_path):
-                complete_command = f"conda activate {conda_env} && nnUNetv2_train {dataset_id} 2d {fold} && python train.py --batchSize {batchSize} --totalEpochs {totalEpochs} --learningRate {learningRate}"
+                complete_command = f"nnUNetv2_train {dataset_id} 2d {fold} && python train.py --batchSize {batchSize} --totalEpochs {totalEpochs} --learningRate {learningRate}"
             else:
-                complete_command = f"conda activate {conda_env} && python train.py --batch_size {batchSize} --max_epochs {totalEpochs} --base_lr {learningRate}"
+                complete_command = f"python train.py --batch_size {batchSize} --max_epochs {totalEpochs} --base_lr {learningRate}"
 
         print(complete_command)
 
@@ -615,11 +615,11 @@ def run_test():
     os.makedirs(output_folder, exist_ok=True)
 
     if os.environ['MODEL_NAME'] == 'nnunet' or os.environ['MODEL_NAME'] == 'nnsam':
-        complete_command = f"conda activate {conda_env} && nnUNetv2_predict -i {input_folder} -o {output_folder} -d {dataset_id} -c 2d -f {fold}"
+        complete_command = f"nnUNetv2_predict -i {input_folder} -o {output_folder} -d {dataset_id} -c 2d -f {fold}"
     elif os.environ['MODEL_NAME'] == 'nnunet3d':
-        complete_command = f"conda activate {conda_env} && nnUNetv2_predict -i {input_folder} -o {output_folder} -d {dataset_id} -c 3d_fullres -f {fold}"
+        complete_command = f"nnUNetv2_predict -i {input_folder} -o {output_folder} -d {dataset_id} -c 3d_fullres -f {fold}"
     else:
-        complete_command = f"conda activate {conda_env} && python test.py"
+        complete_command = f"python test.py"
 
     
     print(input_folder)
@@ -952,7 +952,7 @@ def run_command():
 
         command = request.json.get('command', '')
         
-        complete_command = f"conda activate {conda_env} && {command}"
+        complete_command = f"{command}"
         print(complete_command)
 
         threading.Thread(target=run_command_async, args=(complete_command,)).start()

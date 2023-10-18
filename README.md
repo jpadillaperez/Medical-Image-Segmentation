@@ -1,41 +1,36 @@
-# MedSeg: Medical Image Segmentation GUI Toolbox <br> 可视化医学图像分割工具箱
-
-## Get all segmentation baselines without writing any code. <br> 不用写任何代码便可以运行所有分割模型
-
-Install (安装步骤):
-
-```bash
-conda create -n nnsam python=3.9
-conda activate nnsam
+# Setup
+Run the following commands in the terminal to create the docker image and run the container:
+```
+docker build -t medseg /MedSeg
+docker run -p 8080:5000 -it medseg
 ```
 
-Choose a suitable Pytorch with CUDA to install <br> 
-根据CUDA选择合适版本的Pytorch进行安装
-```bash
+Now, install the requirements inside the container by running the following commands:
+```
+conda activate nnsam
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip3 install git+https://github.com/ChaoningZhang/MobileSAM.git
+pip3 install timm
+pip3 install git+https://github.com/Kent0n-Li/nnSAM.git
+pip3 install nnunetv2
+git clone https://github.com/jpadillaperez/Medical-Image-Segmentation.git
+cd Medical-Image-Segmentation && pip3 install -r requirements.txt
 ```
 
-```bash
-pip install git+https://github.com/ChaoningZhang/MobileSAM.git
-pip install timm
-pip install git+https://github.com/Kent0n-Li/nnSAM.git
-
-git clone https://github.com/Kent0n-Li/Medical-Image-Segmentation.git
-cd Medical-Image-Segmentation-Benchmark
-pip install -r requirements.txt
+Finally, run the following command to start the web app:
+```
+python3 web.py
 ```
 
-运行可视化软件
-```bash
-python web.py
-```
+Then open the browser and go to http://localhost:8080/ to see the web app.
 
-If you only want to use nnSAM, please install [this](https://github.com/Kent0n-Li/nnSAM). <br>
-如果你只想运行nnSAM,请访问该代码仓库[this](https://github.com/Kent0n-Li/nnSAM)
+# Usage
 
-![image](https://github.com/Kent0n-Li/Medical-Image-Segmentation-Benchmark/blob/main/img/img1.png)
-![image](https://github.com/Kent0n-Li/Medical-Image-Segmentation-Benchmark/blob/main/img/img2.png)
-![image](https://github.com/Kent0n-Li/Medical-Image-Segmentation-Benchmark/blob/main/img/img3.png)
-![image](https://github.com/Kent0n-Li/Medical-Image-Segmentation-Benchmark/blob/main/img/img4.png)
-![image](https://github.com/Kent0n-Li/Medical-Image-Segmentation-Benchmark/blob/main/img/img5.png)
+First load the dataset by clicking Import Dataset button and select the dataset folders.
+
+![Alt text](image.png)
+
+Then click the Data Preprocessing button to preprocess the dataset.
+
+![Alt text](image-1.png)
